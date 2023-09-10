@@ -2,10 +2,7 @@ package com.azubike.ellipsis.droneapplication.drones.domain;
 
 import com.azubike.ellipsis.droneapplication.medications.domian.Medication;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Drone {
@@ -22,6 +20,7 @@ public class Drone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String serialNumber;
 
     @Enumerated(EnumType.STRING)
@@ -29,7 +28,7 @@ public class Drone {
 
     private BigDecimal weightLimit;
 
-    private String batteryCapacity;
+    private Integer batteryCapacity;
 
     private DroneState state;
 

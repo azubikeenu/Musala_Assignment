@@ -30,9 +30,8 @@ public class CreateDroneDto {
     @Max(value = 500, message = "weight limit must be a maximum of 500 grams")
     private BigDecimal weightLimit;
 
-    @NotNull(message = "battery capacity cannot be empty")
     @Positive(message = "battery capacity must be a non-zero numeric")
-    private String batteryCapacity;
+    private Integer batteryCapacity;
 
     @ValidDroneState
     private String droneState;

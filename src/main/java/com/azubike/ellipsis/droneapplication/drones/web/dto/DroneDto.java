@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +19,7 @@ public class DroneDto {
     private DroneModel model;
     private String serialNumber;
     private BigDecimal weightLimit;
-    private String batteryCapacity;
+    private Integer batteryCapacity;
     private DroneState state;
     private List<MedicationsDto> medications;
 }

@@ -27,8 +27,10 @@ public abstract class DroneMapper {
 
 
     @Mapping(target = "state" , expression = "java(droneDto.getState()== null ?  droneState.IDLE : droneDto.getState() )")
+    @Mapping(target = "batteryCapacity" ,expression = "java(droneDto.getBatteryCapacity() == null ? 100 : droneDto.getBatteryCapacity())")
     @Mapping(target = "serialNumber" , expression = "java(droneDto.getSerialNumber() == null ? utils.generateRandomString(20) : droneDto.getSerialNumber())")
     public abstract Drone dtoToDrone(DroneDto droneDto);
+
 
     public abstract DroneDto droneToDto(Drone drone);
 
