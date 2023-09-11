@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 
-public interface TestUtils {
+public interface MedicationsTestUtils {
      static Image createImage(String filePath) throws IOException {
         var file = new ClassPathResource(filePath).getFile();
         final byte[] content = Files.readAllBytes(file.toPath());
@@ -27,18 +27,18 @@ public interface TestUtils {
 
 
      static Medication createValidMedication(String filePath) throws IOException {
-        return Medication.builder().image(TestUtils.createImage(filePath)).
+        return Medication.builder().image(MedicationsTestUtils.createImage(filePath)).
                 name("test_name").weight(new BigDecimal("2.5")).code("another_code").build();
     }
 
 
      static MedicationsDto createValidMedicationsDto(String filePath) throws Exception {
-        return MedicationsDto.builder().imageDto(TestUtils.createImageDto(filePath)).
+        return MedicationsDto.builder().imageDto(MedicationsTestUtils.createImageDto(filePath)).
                 name("test_name").weight(new BigDecimal("2.5")).code("another_code").build();
     }
 
      static MedicationsDto updateValidMedicationsDto(String filePath) throws Exception {
-        return MedicationsDto.builder().imageDto(TestUtils.createImageDto(filePath)).
+        return MedicationsDto.builder().imageDto(MedicationsTestUtils.createImageDto(filePath)).
                 name("updated_name").weight(new BigDecimal("2.5")).code("updated_code").build();
     }
 }

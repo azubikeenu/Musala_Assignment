@@ -2,7 +2,7 @@ package com.azubike.ellipsis.droneapplication.medications.repository;
 
 import com.azubike.ellipsis.droneapplication.medications.domian.Image;
 import com.azubike.ellipsis.droneapplication.medications.domian.Medication;
-import com.azubike.ellipsis.droneapplication.medications.utils.TestUtils;
+import com.azubike.ellipsis.droneapplication.medications.utils.MedicationsTestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class MedicationRepositoryTest {
     @Test
     @DisplayName("it should create a new medication")
     void shouldCreateNewMedication() throws Exception {
-        final Medication med = TestUtils.createValidMedication(FILE_PATH);
+        final Medication med = MedicationsTestUtils.createValidMedication(FILE_PATH);
         final Medication savedMedication = medicationRepository.save(med);
         assertThat(savedMedication).isNotNull();
     }
@@ -31,7 +31,7 @@ class MedicationRepositoryTest {
     @Test
     @DisplayName("It should create a new image when medication is persisted ")
     void shouldCreateNewImageWhenMedicationIsPersisted() throws Exception {
-        final Medication med = TestUtils.createValidMedication(FILE_PATH);
+        final Medication med = MedicationsTestUtils.createValidMedication(FILE_PATH);
         medicationRepository.saveAndFlush(med);
         final List<Image> allImages = imageRepository.findAll();
         assertThat(allImages.size()).isEqualTo(1);

@@ -21,7 +21,7 @@ class DroneRepositoryTest {
     }
 
     @Test
-    void findIdleDrones() {
+    void findAllAvailableDrones() {
         final List<Drone> drones = List.of(
                 Drone.builder().id(1L).model(DroneModel.CRUISERWEGHT).
                         batteryCapacity(20).serialNumber("ABCDE").state(DroneState.IDLE).build(),
@@ -35,9 +35,9 @@ class DroneRepositoryTest {
         );
         droneRepository.saveAll(drones);
 
-        final List<Drone> idleDrones = droneRepository.findAllByState(DroneState.IDLE);
+        final List<Drone> idleDrones = droneRepository.findAllByStateIn(List.of(DroneState.IDLE,DroneState.LOADING));
 
-        assertThat(idleDrones.size()).isEqualTo(2);
+        assertThat(idleDrones.size()).isEqualTo(3);
 
     }
 }

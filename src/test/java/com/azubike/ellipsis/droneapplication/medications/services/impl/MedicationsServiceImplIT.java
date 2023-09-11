@@ -1,8 +1,9 @@
 package com.azubike.ellipsis.droneapplication.medications.services.impl;
 
 import com.azubike.ellipsis.droneapplication.medications.repository.MedicationRepository;
-import com.azubike.ellipsis.droneapplication.medications.utils.TestUtils;
+import com.azubike.ellipsis.droneapplication.medications.utils.MedicationsTestUtils;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ public class MedicationsServiceImplIT {
     @Autowired
     MedicationRepository medicationRepository;
 
+
     @AfterEach
     void cleanDataBase() {
         medicationRepository.deleteAll();
@@ -32,8 +34,9 @@ public class MedicationsServiceImplIT {
 
     @Test
     @DisplayName("It should create a new medication with default image if no image is supplied")
-    void itShouldCreateANewMedicationWithDefaultImageIfNoImageIsSupplied() throws Exception {
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+    @SneakyThrows
+    void itShouldCreateANewMedicationWithDefaultImageIfNoImageIsSupplied() {
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
         medicationsDto.setImageDto(null);
         final MedicationsDto returnedValue = medicationsService.createMedication(medicationsDto, null);
         assertThat(returnedValue.getImageDto()).isNotNull();
@@ -42,8 +45,9 @@ public class MedicationsServiceImplIT {
 
     @Test
     @DisplayName("It should return a medication")
-    void itShouldReturnAMedication() throws Exception {
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+    @SneakyThrows
+    void itShouldReturnAMedication()  {
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
         final MedicationsDto medication = medicationsService.createMedication(medicationsDto, null);
         final MedicationsDto foundMed = medicationsService.findMedicationById(medication.getId());
         assertThat(foundMed.getName()).isEqualTo(medication.getName());
@@ -54,8 +58,9 @@ public class MedicationsServiceImplIT {
 
     @Test
     @DisplayName("It should update a medication")
-    void itShouldUpdateTheMedication() throws Exception {
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+    @SneakyThrows
+    void itShouldUpdateTheMedication()  {
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
         final MedicationsDto medication = medicationsService.createMedication(medicationsDto, null);
         MedicationsDto foundMed = medicationsService.findMedicationById(medication.getId());
         MockMultipartFile mockMultipartFile =

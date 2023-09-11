@@ -22,6 +22,12 @@ public class DroneController {
     private final DroneService droneService;
     private final DroneMapper droneMapper;
 
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<DroneDto>> getDrones() {
+        return ResponseEntity.ok(droneService.getDrones());
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<DroneDto> register(@Valid @RequestBody CreateDroneDto createDroneDto) {
         final DroneDto droneDto = droneMapper.createDroneDtoToDroneDto(createDroneDto);
@@ -42,7 +48,7 @@ public class DroneController {
 
     @GetMapping(value = "/available-for-loading", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<DroneDto>> getIdleDrones() {
-        return ResponseEntity.ok(droneService.getIdleDrones());
+        return ResponseEntity.ok(droneService.getAvailableDrones());
     }
 
     @GetMapping(value = "/{drone_serial_number}/battery-level", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,5 +57,17 @@ public class DroneController {
         return ResponseEntity.ok(String.format("The Battery capacity of the drone with serialNumber %s is %d percent", serialNumber,
                 droneBatteryCapacity));
     }
+
+    @PutMapping(value = "/{drone_serial_number}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<DroneDto> update(@PathVariable("drone_serial_number") String serialNumber, @Valid @RequestBody DroneDto droneDto) {
+        return ResponseEntity.ok(droneService.updateDrone(droneDto, serialNumber));
+
+    }
+
+    @DeleteMapping(value = "/{drone_serial_number}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<String> delete(@PathVariable("drone_serial_number") String droneSerialNumber) {
+        return ResponseEntity.status(HttpStatus.OK).body(droneService.deleteDrone(droneSerialNumber));
+    }
+
 
 }

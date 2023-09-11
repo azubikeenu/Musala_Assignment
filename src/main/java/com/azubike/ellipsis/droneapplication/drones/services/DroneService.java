@@ -1,6 +1,5 @@
 package com.azubike.ellipsis.droneapplication.drones.services;
 
-import com.azubike.ellipsis.droneapplication.drones.domain.Drone;
 import com.azubike.ellipsis.droneapplication.drones.web.dto.DroneDto;
 import com.azubike.ellipsis.droneapplication.drones.web.dto.LoadMedicationsDto;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
@@ -16,10 +15,17 @@ public interface DroneService {
 
     List<MedicationsDto> getLoadedMedications(String serialNumber);
 
-    List<DroneDto> getIdleDrones();
+    List<DroneDto> getAvailableDrones();
 
-    Integer  getDroneBatteryCapacity(String serialNumber);
+    Integer getDroneBatteryCapacity(String serialNumber);
 
+
+    List<DroneDto> getDrones();
+
+
+    DroneDto updateDrone(DroneDto droneDto, String serialNumber);
+
+    String deleteDrone(String serialNumber);
 
 }
 

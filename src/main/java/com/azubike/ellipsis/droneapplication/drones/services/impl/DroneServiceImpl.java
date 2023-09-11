@@ -13,6 +13,8 @@ import com.azubike.ellipsis.droneapplication.medications.domian.Medication;
 import com.azubike.ellipsis.droneapplication.medications.repository.MedicationRepository;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,6 +33,10 @@ public class DroneServiceImpl implements DroneService {
 
     @Override
     public DroneDto register(final DroneDto droneDto) {
+        final long count = droneRepository.count();
+        if (count >= 10) {
+            throw new ConflictException("Maximum amount of drone registration reached");
+        }
         final Optional<Drone> optionalDrone = droneRepository.findBySerialNumber(droneDto.getSerialNumber());
         if (optionalDrone.isPresent())
             throw new ConflictException(String.format("Drone with serialNumber %s already exists",
@@ -66,15 +72,15 @@ public class DroneServiceImpl implements DroneService {
 
     @Override
     public List<MedicationsDto> getLoadedMedications(final String serialNumber) {
-        final DroneDto droneDto = this.findBySerialNumber(serialNumber);
-        return droneDto.getMedications();
+        Drone drone = droneRepository.findBySerialNumber(serialNumber).orElseThrow(() -> new
+                NotFoundException(String.format("drone with serialNumber %s does not exist", serialNumber)));
+        return droneMapper.droneToDto(drone).getMedications();
     }
 
     @Override
-    public List<DroneDto> getIdleDrones() {
-
+    public List<DroneDto> getAvailableDrones() {
         List<DroneDto> idleDrones = new ArrayList<>();
-        final List<Drone> drones = droneRepository.findAllByState(DroneState.IDLE);
+        final List<Drone> drones = droneRepository.findAllByStateIn(List.of(DroneState.IDLE, DroneState.LOADING, DroneState.DELIVERED));
         for (Drone drone : drones) {
             idleDrones.add(droneMapper.droneToDto(drone));
         }
@@ -83,7 +89,41 @@ public class DroneServiceImpl implements DroneService {
 
     @Override
     public Integer getDroneBatteryCapacity(final String serialNumber) {
-        return this.findBySerialNumber(serialNumber).getBatteryCapacity();
+        Drone drone = droneRepository.findBySerialNumber(serialNumber).orElseThrow(() -> new
+                NotFoundException(String.format("drone with serialNumber %s does not exist", serialNumber)));
+        return droneMapper.droneToDto(drone).getBatteryCapacity();
+    }
+
+    @Override
+    public List<DroneDto> getDrones() {
+        List<DroneDto> droneDtoList = new ArrayList<>();
+        List<Drone> drones = droneRepository.findAll();
+        for (Drone drone : drones) {
+            droneDtoList.add(droneMapper.droneToDto(drone));
+        }
+
+        return droneDtoList;
+    }
+
+    @Override
+    public DroneDto updateDrone(DroneDto droneDto, String serialNumber) {
+        Drone drone = droneRepository.findBySerialNumber(serialNumber).orElseThrow(() -> new
+                NotFoundException(String.format("drone with serialNumber %s does not exist", serialNumber)));
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true)
+                .setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.map(drone, droneDto);
+        final Drone updatedDrone = droneRepository.save(drone);
+        return droneMapper.droneToDto(updatedDrone);
+    }
+
+    @Override
+    public String deleteDrone(final String serialNumber) {
+        Drone drone = droneRepository.findBySerialNumber(serialNumber).orElseThrow(() -> new
+                NotFoundException(String.format("drone with serialNumber %s does not exist", serialNumber)));
+        droneRepository.delete(drone);
+        return String.format("DRONE WITH SERIAL NUMBER %s DELETED SUCCESSFULLY!", serialNumber);
     }
 
 
@@ -104,7 +144,6 @@ public class DroneServiceImpl implements DroneService {
     }
 
     private boolean isWithinWeightCapacity(Drone drone) {
-        System.out.println(getTotalWeight(drone).compareTo(drone.getWeightLimit()));
         return drone.getWeightLimit().compareTo(getTotalWeight(drone)) >= 0;
     }
 
@@ -129,6 +168,5 @@ public class DroneServiceImpl implements DroneService {
 
         return true;
     }
-
 
 }

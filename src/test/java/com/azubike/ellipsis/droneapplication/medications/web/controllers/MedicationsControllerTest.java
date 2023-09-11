@@ -1,10 +1,11 @@
 package com.azubike.ellipsis.droneapplication.medications.web.controllers;
 
 import com.azubike.ellipsis.droneapplication.medications.services.MedicationService;
-import com.azubike.ellipsis.droneapplication.medications.utils.TestUtils;
+import com.azubike.ellipsis.droneapplication.medications.utils.MedicationsTestUtils;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsPageList;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -44,10 +45,11 @@ class MedicationsControllerTest {
 
 
     @Test
-    public void testGetMedications() throws Exception {
+    @SneakyThrows
+    public void testGetMedications() {
         // Mock the behavior of medicationService.listMedications
-        final List<MedicationsDto> medications = List.of(TestUtils.createValidMedicationsDto(FILE_PATH),
-                TestUtils.createValidMedicationsDto(FILE_PATH)
+        final List<MedicationsDto> medications = List.of(MedicationsTestUtils.createValidMedicationsDto(FILE_PATH),
+                MedicationsTestUtils.createValidMedicationsDto(FILE_PATH)
         );
         final MedicationsPageList medicationsPageList = new MedicationsPageList(medications);
 
@@ -67,8 +69,9 @@ class MedicationsControllerTest {
 
 
     @Test
-    void create() throws Exception {
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+    @SneakyThrows
+    void create() {
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
         MockMultipartFile file =
                 new MockMultipartFile("medicationsImage", "test-image.jpg",
                         "image/jpeg", "image data".getBytes());
@@ -93,9 +96,10 @@ class MedicationsControllerTest {
     }
 
     @Test
-    void itsShouldPerformValidationOnFormData() throws Exception{
+    @SneakyThrows
+    void itsShouldPerformValidationOnFormData() {
 
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
         MockMultipartFile file =
                 new MockMultipartFile("invalid type", "text.txt",
                         "text/txt", "invalid type".getBytes());
@@ -116,8 +120,9 @@ class MedicationsControllerTest {
     }
 
     @Test
-    void findById() throws Exception {
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+    @SneakyThrows
+    void findById() {
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
         when(medicationService.findMedicationById(anyLong())).thenReturn(medicationsDto);
         mockMvc.perform(get(BASE_URL + "/{id}", anyLong()).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -128,9 +133,10 @@ class MedicationsControllerTest {
     }
 
     @Test
-    void update() throws Exception {
-        final MedicationsDto validMedicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
-        final MedicationsDto updatedMedicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+    @SneakyThrows
+    void update() {
+        final MedicationsDto validMedicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
+        final MedicationsDto updatedMedicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
 
         var name = "Updated_Name";
         var weight = "123";
@@ -160,10 +166,11 @@ class MedicationsControllerTest {
     }
 
     @Test
-    public void testDeleteMedication() throws Exception {
+    @SneakyThrows
+    public void testDeleteMedication() {
         Long id = 1L;
         doNothing().when(medicationService).deleteMedication(id);
-        mockMvc.perform(delete(String.format("%s/%d",BASE_URL ,id)))
+        mockMvc.perform(delete(String.format("%s/%d", BASE_URL, id)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("MEDICATION SUCCESSFULLY DELETED"));
         verify(medicationService, times(1)).deleteMedication(eq(id));

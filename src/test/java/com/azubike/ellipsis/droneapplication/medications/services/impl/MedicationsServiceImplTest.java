@@ -3,10 +3,11 @@ package com.azubike.ellipsis.droneapplication.medications.services.impl;
 import com.azubike.ellipsis.droneapplication.exception.NotFoundException;
 import com.azubike.ellipsis.droneapplication.medications.domian.Medication;
 import com.azubike.ellipsis.droneapplication.medications.repository.MedicationRepository;
-import com.azubike.ellipsis.droneapplication.medications.utils.TestUtils;
+import com.azubike.ellipsis.droneapplication.medications.utils.MedicationsTestUtils;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsPageList;
 import com.azubike.ellipsis.droneapplication.medications.web.mappers.MedicationsMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,9 +38,10 @@ class MedicationsServiceImplTest {
 
     @Test
     @DisplayName("it should create a new medication")
-    void itShouldCreateANewMedication() throws Exception {
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
-        final Medication medication = TestUtils.createValidMedication(FILE_PATH);
+    @SneakyThrows
+    void itShouldCreateANewMedication()  {
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
+        final Medication medication = MedicationsTestUtils.createValidMedication(FILE_PATH);
         when(medicationsMapper.dtoToMedication(any(MedicationsDto.class))).thenReturn(medication);
         when(medicationsMapper.medicationsToDto(any(Medication.class))).thenReturn(medicationsDto);
         when(medicationRepository.save(any())).thenReturn(medication);
@@ -59,9 +61,10 @@ class MedicationsServiceImplTest {
 
     @Test
     @DisplayName("It should return a MedicationDto")
-    void itShouldReturnAMedicationDto() throws Exception {
-        when(medicationRepository.findById(anyLong())).thenReturn(Optional.of(TestUtils.createValidMedication(FILE_PATH)));
-        when(medicationsMapper.medicationsToDto(any(Medication.class))).thenReturn(TestUtils.createValidMedicationsDto(FILE_PATH));
+    @SneakyThrows
+    void itShouldReturnAMedicationDto()  {
+        when(medicationRepository.findById(anyLong())).thenReturn(Optional.of(MedicationsTestUtils.createValidMedication(FILE_PATH)));
+        when(medicationsMapper.medicationsToDto(any(Medication.class))).thenReturn(MedicationsTestUtils.createValidMedicationsDto(FILE_PATH));
         final MedicationsDto foundMed = medicationsService.findMedicationById(anyLong());
         assertThat(foundMed).isNotNull();
 
@@ -69,10 +72,11 @@ class MedicationsServiceImplTest {
 
     @Test
     @DisplayName("It should return a list of Medications")
-    void itShouldReturnAPageableListOfMedications() throws Exception {
-        List<Medication> medications = List.of(TestUtils.createValidMedication(FILE_PATH),
-                TestUtils.createValidMedication(FILE_PATH));
-        final MedicationsDto medicationsDto = TestUtils.createValidMedicationsDto(FILE_PATH);
+    @SneakyThrows
+    void itShouldReturnAPageableListOfMedications()  {
+        List<Medication> medications = List.of(MedicationsTestUtils.createValidMedication(FILE_PATH),
+                MedicationsTestUtils.createValidMedication(FILE_PATH));
+        final MedicationsDto medicationsDto = MedicationsTestUtils.createValidMedicationsDto(FILE_PATH);
         Page<Medication> medicationsPage = new PageImpl<>(medications,
                 PageRequest.of(0, 10, Sort.Direction.DESC, "id"),
                 medications.size());
