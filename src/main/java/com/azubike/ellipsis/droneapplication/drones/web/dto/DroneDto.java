@@ -12,7 +12,6 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,7 +22,7 @@ public class DroneDto {
     private Long id;
     @ValidDroneModel
     private DroneModel model;
-    @Length(max = 100 ,message = "serial number must have a maximum of 100 characters")
+    @Length(max = 100, message = "serial number must have a maximum of 100 characters")
     private String serialNumber;
     @Max(value = 500, message = "weight limit must be a maximum of 500 grams")
     private BigDecimal weightLimit;

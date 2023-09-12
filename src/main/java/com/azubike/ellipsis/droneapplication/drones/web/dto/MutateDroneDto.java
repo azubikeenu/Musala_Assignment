@@ -1,10 +1,7 @@
 package com.azubike.ellipsis.droneapplication.drones.web.dto;
 
-import com.azubike.ellipsis.droneapplication.drones.domain.DroneState;
-import com.azubike.ellipsis.droneapplication.drones.domain.DroneModel;
 import com.azubike.ellipsis.droneapplication.drones.validation.annotations.ValidDroneModel;
 import com.azubike.ellipsis.droneapplication.drones.validation.annotations.ValidDroneState;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +15,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateDroneDto {
+public class MutateDroneDto {
 
     @Length(max = 100 ,message = "serial number must have a maximum of 100 characters")
     private String serialNumber;

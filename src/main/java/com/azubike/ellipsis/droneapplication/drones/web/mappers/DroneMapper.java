@@ -3,7 +3,7 @@ package com.azubike.ellipsis.droneapplication.drones.web.mappers;
 import com.azubike.ellipsis.droneapplication.drones.domain.Drone;
 import com.azubike.ellipsis.droneapplication.drones.domain.DroneModel;
 import com.azubike.ellipsis.droneapplication.drones.domain.DroneState;
-import com.azubike.ellipsis.droneapplication.drones.web.dto.CreateDroneDto;
+import com.azubike.ellipsis.droneapplication.drones.web.dto.MutateDroneDto;
 import com.azubike.ellipsis.droneapplication.drones.web.dto.DroneDto;
 import com.azubike.ellipsis.droneapplication.utils.Utils;
 import org.mapstruct.Mapper;
@@ -23,7 +23,7 @@ public abstract class DroneMapper {
     @Mapping(target = "model", expression = "java(droneModel.valueOf(createDroneDto.getDroneModel().toUpperCase()))")
     @Mapping(target = "medications", ignore = true)
     @Mapping(target = "id", ignore = true)
-    public abstract DroneDto createDroneDtoToDroneDto(CreateDroneDto createDroneDto);
+    public abstract DroneDto mutateDroneDtoToDroneDto(MutateDroneDto createDroneDto);
 
 
     @Mapping(target = "state" , expression = "java(droneDto.getState()== null ?  droneState.IDLE : droneDto.getState() )")

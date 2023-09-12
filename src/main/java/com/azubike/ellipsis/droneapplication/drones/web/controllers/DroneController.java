@@ -1,7 +1,7 @@
 package com.azubike.ellipsis.droneapplication.drones.web.controllers;
 
 import com.azubike.ellipsis.droneapplication.drones.services.DroneService;
-import com.azubike.ellipsis.droneapplication.drones.web.dto.CreateDroneDto;
+import com.azubike.ellipsis.droneapplication.drones.web.dto.MutateDroneDto;
 import com.azubike.ellipsis.droneapplication.drones.web.dto.DroneDto;
 import com.azubike.ellipsis.droneapplication.drones.web.dto.LoadMedicationsDto;
 import com.azubike.ellipsis.droneapplication.drones.web.mappers.DroneMapper;
@@ -29,14 +29,14 @@ public class DroneController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<DroneDto> register(@Valid @RequestBody CreateDroneDto createDroneDto) {
-        final DroneDto droneDto = droneMapper.createDroneDtoToDroneDto(createDroneDto);
+    ResponseEntity<DroneDto> register(@Valid @RequestBody MutateDroneDto createDroneDto) {
+        final DroneDto droneDto = droneMapper.mutateDroneDtoToDroneDto(createDroneDto);
         final DroneDto returnedValue = droneService.register(droneDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(returnedValue);
     }
 
     @PostMapping(value = "/{drone_serial_number}/load", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<DroneDto> load(@RequestBody LoadMedicationsDto loadMedicationsDto,
+    ResponseEntity<DroneDto> load(@RequestBody @Valid LoadMedicationsDto loadMedicationsDto,
                                   @PathVariable("drone_serial_number") String serialNumber) {
         return ResponseEntity.ok(droneService.loadMedications(loadMedicationsDto, serialNumber));
     }
@@ -47,7 +47,7 @@ public class DroneController {
     }
 
     @GetMapping(value = "/available-for-loading", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<DroneDto>> getIdleDrones() {
+    ResponseEntity<List<DroneDto>> getAvailableDrones() {
         return ResponseEntity.ok(droneService.getAvailableDrones());
     }
 
@@ -59,7 +59,8 @@ public class DroneController {
     }
 
     @PutMapping(value = "/{drone_serial_number}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<DroneDto> update(@PathVariable("drone_serial_number") String serialNumber, @Valid @RequestBody DroneDto droneDto) {
+    ResponseEntity<DroneDto> update(@PathVariable("drone_serial_number") String serialNumber, @Valid @RequestBody MutateDroneDto mutateDroneDto) {
+        var droneDto = droneMapper.mutateDroneDtoToDroneDto(mutateDroneDto);
         return ResponseEntity.ok(droneService.updateDrone(droneDto, serialNumber));
 
     }
