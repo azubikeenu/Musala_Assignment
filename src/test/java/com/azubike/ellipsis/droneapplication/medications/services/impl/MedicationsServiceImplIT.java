@@ -1,5 +1,6 @@
 package com.azubike.ellipsis.droneapplication.medications.services.impl;
 
+import com.azubike.ellipsis.droneapplication.medications.repository.ImageRepository;
 import com.azubike.ellipsis.droneapplication.medications.repository.MedicationRepository;
 import com.azubike.ellipsis.droneapplication.medications.utils.MedicationsTestUtils;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
@@ -25,10 +26,14 @@ public class MedicationsServiceImplIT {
     @Autowired
     MedicationRepository medicationRepository;
 
+    @Autowired
+    ImageRepository imageRepository;
+
 
     @AfterEach
     void cleanDataBase() {
         medicationRepository.deleteAll();
+        imageRepository.deleteAll();
     }
 
 
