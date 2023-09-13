@@ -40,7 +40,6 @@ public class AppExceptionHandler {
                 new ErrorMessage(
                         new Date(), parsedErrors.toString(),path);
 
-        System.out.println(errorMessage);
 
         return new ResponseEntity<>( errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
