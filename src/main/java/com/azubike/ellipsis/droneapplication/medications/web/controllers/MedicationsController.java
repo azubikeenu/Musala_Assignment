@@ -4,6 +4,8 @@ import com.azubike.ellipsis.droneapplication.medications.services.MedicationServ
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsPageList;
 import com.azubike.ellipsis.droneapplication.medications.validation.annotations.IsImageFile;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/medications")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Medications" , description = "Medications REST endpoints")
 public class MedicationsController {
     private final MedicationService medicationService;
 
@@ -44,7 +47,8 @@ public class MedicationsController {
     }
 
 
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(hidden = true)
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE} ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<MedicationsDto> create(@Valid @ModelAttribute MedicationsDto medicationsDto
             , @RequestPart(value = "medicationsImage", required = false) @IsImageFile MultipartFile medicationsImage) {
         var returnedValue = medicationService.createMedication(medicationsDto, medicationsImage);
@@ -59,6 +63,7 @@ public class MedicationsController {
     }
 
 
+    @Operation(hidden = true)
     @PostMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<MedicationsDto> update(@Valid @ModelAttribute MedicationsDto medicationsDto
             , @RequestPart(value = "medicationsImage", required = false) @IsImageFile MultipartFile medicationsImage

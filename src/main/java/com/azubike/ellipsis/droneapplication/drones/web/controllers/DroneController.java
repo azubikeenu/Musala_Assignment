@@ -6,6 +6,7 @@ import com.azubike.ellipsis.droneapplication.drones.web.dto.DroneDto;
 import com.azubike.ellipsis.droneapplication.drones.web.dto.LoadMedicationsDto;
 import com.azubike.ellipsis.droneapplication.drones.web.mappers.DroneMapper;
 import com.azubike.ellipsis.droneapplication.medications.web.dto.MedicationsDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/drones")
+@Tag(name = "Drones" , description = "Drone REST endpoints")
 public class DroneController {
     private final DroneService droneService;
     private final DroneMapper droneMapper;
