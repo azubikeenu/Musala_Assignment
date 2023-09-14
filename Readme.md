@@ -24,7 +24,7 @@ A Drone is characterized by the following attributes:
 
 Each Medication has the following properties:
 
-- Name (allowed only letters, numbers, '-', '_')
+- Name (allowed only letters, numbers, ‘-‘, ‘\ _’)
 - Weight
 - Code (allowed only uppercase letters, underscore, and numbers)
 - Image (picture of the medication case)
