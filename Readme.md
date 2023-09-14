@@ -416,3 +416,8 @@ The project employs the MVC (Model-View-Controller) pattern to ensure separation
 # Design Considerations
 
 In-memory H2 database is used for persistence, and images are stored in the database as byte values. While this approach simplifies the application and makes it self-contained, it may not be performant in a production environment. For production, a better approach would involve using presigned URLs and delegating image storage to a third-party cloud storage service like AWS S3 or Cloudinary.
+
+
+# Swagger Docs 
+
+Additionally the swagger docs can be found in http://localhost:8080/swagger-ui/index.html
